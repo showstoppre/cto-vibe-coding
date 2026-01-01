@@ -48,6 +48,8 @@ npm start
 
 ## Technical Details
 
+For a deep dive into how the multiplayer synchronization works, see [MULTIPLAYER.md](./MULTIPLAYER.md).
+
 ### Architecture
 
 - **Frontend**: React 19 with Next.js 16 App Router
