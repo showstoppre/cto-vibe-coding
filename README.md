@@ -1,36 +1,151 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Place Clone - 10x10 Grid Multiplayer
+
+A collaborative pixel art canvas inspired by r/place, built with Next.js 16, React 19, and Tailwind CSS 4.
+
+## Features
+
+- **10x10 Grid Canvas**: A collaborative pixel grid where multiple users can place colored pixels
+- **Real-time Multiplayer**: Changes are synced across all connected clients every second
+- **Color Palette**: Choose from 10 different colors to paint your pixels
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Dark Mode Support**: Automatically adapts to your system's color scheme
+
+## How to Play
+
+1. Select a color from the color palette
+2. Click on any cell in the 10x10 grid to paint it with your selected color
+3. Watch as other players add their own pixels in real-time
+4. Create collaborative art with players from around the world!
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+ installed
+- npm or your preferred package manager
+
+### Installation
 
 ```bash
+# Install dependencies
+npm install
+
+# Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the canvas.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Building for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Build the application
+npm run build
 
-## Learn More
+# Start the production server
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Technical Details
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Architecture
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Frontend**: React 19 with Next.js 16 App Router
+- **Styling**: Tailwind CSS 4 with dark mode support
+- **State Management**: Client-side React state with server synchronization
+- **API**: Next.js API routes for grid state management
+- **Real-time Updates**: Polling mechanism (1-second intervals) for multi-player synchronization
 
-## Deploy on Vercel
+### Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+├── app/
+│   ├── api/
+│   │   └── grid/
+│   │       └── route.ts       # API endpoint for grid state
+│   ├── globals.css            # Global styles and Tailwind config
+│   ├── layout.tsx             # Root layout component
+│   └── page.tsx               # Main page component
+├── components/
+│   └── Grid.tsx               # Grid component with game logic
+└── public/                    # Static assets
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### API Endpoints
+
+#### GET /api/grid
+Returns the current state of the 10x10 grid.
+
+**Response:**
+```json
+{
+  "grid": [
+    ["#ffffff", "#ff0000", ...],
+    ...
+  ]
+}
+```
+
+#### POST /api/grid
+Updates a single cell in the grid.
+
+**Request Body:**
+```json
+{
+  "row": 0,
+  "col": 0,
+  "color": "#ff0000"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "grid": [...]
+}
+```
+
+## Customization
+
+### Grid Size
+To change the grid size, update the `GRID_SIZE` constant in:
+- `app/api/grid/route.ts`
+- `components/Grid.tsx`
+
+### Colors
+To add or modify colors, update the `COLORS` array in `components/Grid.tsx`:
+
+```typescript
+const COLORS = [
+  '#ffffff', '#000000', '#ff0000', '#00ff00', '#0000ff',
+  '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#800080',
+];
+```
+
+### Polling Interval
+To adjust the real-time update frequency, modify the interval in `components/Grid.tsx`:
+
+```typescript
+const interval = setInterval(() => {
+  fetchGrid();
+}, 1000); // Change 1000 to your desired interval in milliseconds
+```
+
+## Future Enhancements
+
+- WebSocket support for true real-time updates
+- User identification and rate limiting
+- Persistent storage (database)
+- Canvas history and undo functionality
+- Larger grid sizes
+- More color options
+- Drawing tools (fill, line, etc.)
+
+## Contributing
+
+Contributions are welcome! Feel free to submit issues and pull requests.
+
+## License
+
+MIT
